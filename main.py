@@ -105,7 +105,7 @@ class Model():
         b = 1 + int(random.random() * self.max_b)
         if self.random_swap and random.random() > 0.5:
             a, b = b, a
-        return (a, b, a + b)
+        return (a, b, a * b)
 
     @staticmethod
     def simple_priority_function(correct, incorrect, eps=0):
@@ -133,13 +133,13 @@ class Model():
                 exercise = self.generate_random_exercise()
             else:
                 (a, b) = exercise_to_prio.keys()[ndx]
-                exercise = (a, b, a + b)
+                exercise = (a, b, a * b)
 
         return exercise
 
     def present(self, a, b, ans):
         print(get_now())
-        print("{} + {} = ".format(a, b))
+        print("{} * {} = ".format(a, b))
         user_answer = input_answer(self.timeout)
 
         is_correct = (ans == user_answer)
@@ -147,7 +147,7 @@ class Model():
             ColorPrint.colorprint("YES :-)", ColorPrint.CORRECT)
         else:
             ColorPrint.colorprint("NO :-(", ColorPrint.INCORRECT)
-            ColorPrint.colorprint("{} + {} = {}".format(a, b, ans), ColorPrint.INCORRECT)
+            ColorPrint.colorprint("{} * {} = {}".format(a, b, ans), ColorPrint.INCORRECT)
         print("\n")
         return is_correct
 
@@ -164,7 +164,7 @@ class Model():
 
 
 if __name__ == '__main__':
-    model = Model(max_a=10, max_b=10, random_swap=True, random_portion=0.75, timeout=25)
+    model = Model(max_a=5, max_b=10, random_swap=True, random_portion=0.75, timeout=25)
     model.study(num_exercises=10)
 
     # debug
