@@ -10,21 +10,23 @@ class AbstractQuestionType:
 
 
 class QuestionTypeBinaryOp(AbstractQuestionType):
-    def __init__(self, max_a=5, max_b=10, op="*", random_swap=True):
+    def __init__(self, min_a=1, max_a=5, min_b=1, max_b=10, op="*", random_swap=True):
+        self.min_a = min_a
         self.max_a = max_a
+        self.min_b = min_b
         self.max_b = max_b
 
-        assert(op in ["*", "+"])
+        assert (op in ["*", "+", "-", "/"])
         self.op = op
         self.swap = random_swap
         self.all_questions = self._generate_all()
 
     def _generate_all(self):
-        all_questions = {QuestionInstanceBinaryOp(a, b, self.op) for a in range(1, self.max_a + 1) for b in
-                         range(1, self.max_b + 1)}
+        all_questions = {QuestionInstanceBinaryOp(a, b, self.op) for a in range(self.min_a, self.max_a + 1) for b in
+                         range(self.min_b, self.max_b + 1)}
         if self.swap is True:
-            swapped = {QuestionInstanceBinaryOp(a, b, self.op) for a in range(1, self.max_b + 1) for b in
-                       range(1, self.max_a + 1)}
+            swapped = {QuestionInstanceBinaryOp(a, b, self.op) for a in range(self.min_b, self.max_b + 1) for b in
+                       range(self.min_a, self.max_a + 1)}
             all_questions = all_questions.union(swapped)
         return all_questions
 

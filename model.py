@@ -101,19 +101,4 @@ class SessionManager:
             # self.history[(a, b)] = current_counts
 
 
-class Model():
-    def __init__(self, max_a=5, max_b=10, random_swap=True, random_portion=0.7, timeout=10):
-        self.max_a = max_a
-        self.max_b = max_b
-        self.random_swap = random_swap
-        self.random_portion = random_portion
-        self.timeout = timeout
-        self.max_num = max(max_a, max_b)
-        self.history = {(a, b): (0, 0) for a in range(1, self.max_num + 1) for b in range(1, self.max_num + 1)}
 
-
-if __name__ == "__main__":
-    question_type = QuestionTypeBinaryOp(max_a=5, max_b=10, op="*", random_swap=True)
-    curriculum = SingleTypeCurriculum(question_type)
-    manager = SessionManager(curriculum)
-    manager.study(5)
