@@ -20,13 +20,30 @@ class QuestionTypeBinaryOp(AbstractQuestionType):
         self.op = op
         self.swap = random_swap
 
-    def generate_question(self):
+    def _generate_question_args(self):
         a1 = int(self.min_a + random.random() * (self.max_a + 1 - self.min_a))
         b1 = int(self.min_b + random.random() * (self.max_b + 1 - self.min_b))
+        return a1, b1
 
-        if self.swap is True and random.random() < 0.5:
-            a1, b1 = b1, a1
+    def _fix_question_args_by_op(self, a1, b1):
+        if self.op in {"*", "+"}:
+            if self.swap is True and random.random() < 0.5:
+                a1, b1 = b1, a1
 
+        elif self.op in  {'-', '/'}:
+            # make a1 smaller
+            if (a1 < b1):
+                a1, b1 = b1, a1
+
+            if self.op == '/':
+                # force whole devision
+                a1 = int(a1/b1) * b1
+
+        return a1, b1
+
+    def generate_question(self):
+        a1, b1 = self._generate_question_args()
+        a1, b1 = self._fix_question_args_by_op(a1, b1)
         question = QuestionInstanceBinaryOp(a1, b1, self.op)
         return question
 
