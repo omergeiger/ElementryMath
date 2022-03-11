@@ -1,37 +1,40 @@
 import random
+
+from typing import List, Tuple
+
 from questions import AbstractQuestionType, QuestionTypeBinaryOp, QuestionInstanceBinaryOp
 from utils import choose_by_proportion
 
 from HistoryLogger import HistoryLogger, ResponseRecord
 
 
-class AbstractSingleTypeCurriculum:
+class AbstractCurriculum:
     def __init__(self, **kargs):
+        self.history = None
         raise NotImplemented()
 
-    def get_excercise(self):
+    def get_question(self):
         raise NotImplemented()
 
     def init_history(self, history: HistoryLogger):
         self.history = history
 
 
-class SingleTypeCurriculumRandom(AbstractSingleTypeCurriculum):
+class CurriculumRandom(AbstractCurriculum):
     def __init__(self, question_type: AbstractQuestionType):
         self.all_questions = question_type.get_all()
 
-    def get_excercise(self):
+    def get_question(self):
         all_questions_list = list(self.all_questions)
         selected_index = int(random.random() * len(all_questions_list))
         selected_question = all_questions_list[selected_index]
         return selected_question
 
 
-class SingleTypeCurriculumByHistory(AbstractSingleTypeCurriculum):
-    def __init__(self, question_type: AbstractQuestionType):
-        self.question_type = question_type
-        self.history = None  # use init_history()
-        self.fallback_curriculum = SingleTypeCurriculumRandom(question_type)
+class CurriculumByErrors(AbstractCurriculum):
+    def __init__(self, fallback_question_type: AbstractQuestionType):
+        self.question_type = fallback_question_type
+        self.fallback_curriculum = CurriculumRandom(fallback_question_type)
 
     def update_history(self, rec: ResponseRecord):
         self.history.append(rec)
@@ -48,11 +51,30 @@ class SingleTypeCurriculumByHistory(AbstractSingleTypeCurriculum):
         exercise_to_prio = {q: priority for (q, priority) in exercise_to_prio.items() if priority > 0}
         return exercise_to_prio
 
-    def get_excercise(self):
+    def get_question(self):
         question_to_prio = self.prioritize_exercises()
         if len(question_to_prio) == 0:
-            question = self.fallback_curriculum.get_excercise()
+            question = self.fallback_curriculum.get_question()
         else:
             ndx = choose_by_proportion(question_to_prio.values())
             question = list(question_to_prio.keys())[ndx]
         return question
+
+
+class CompostiteCurriculum(AbstractCurriculum):
+    def __init__(self, curriculum_proportions: List[Tuple[AbstractCurriculum, float]]):
+        self.curriculums = [curriculum for (curriculum, proportion) in curriculum_proportions]
+        self.proportions = [proportion for (curriculum, proportion) in curriculum_proportions]
+
+    def get_question(self):
+        curriculum_index = choose_by_proportion(self.proportions)
+        curriculum = self.curriculums[curriculum_index]
+        question = curriculum.get_question()
+        return question
+
+    def init_history(self, history: HistoryLogger):
+        super().init_history(history)
+        # common history for all sub-curriculums
+
+        for curriculum in self.curriculums:
+            curriculum.history = self.history

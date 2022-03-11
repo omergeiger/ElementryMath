@@ -2,19 +2,18 @@ from color_print import colorprint, ColorCodes
 from timed_input import input_answer
 from utils import get_now
 from questions import AbstractQuestionType, QuestionTypeBinaryOp, QuestionInstanceBinaryOp
-from curriculum import AbstractSingleTypeCurriculum
+from curriculum import AbstractCurriculum
 from utils import get_epoch
 
 from HistoryLogger import HistoryLogger, ResponseRecord
 
 
 class SessionManager:
-    def __init__(self, curriculum: AbstractSingleTypeCurriculum, timeout=10):
+    def __init__(self, curriculum: AbstractCurriculum, timeout=10):
         self.timeout = timeout
         self.history = HistoryLogger()
         self.curriculum = curriculum
         self.curriculum.init_history(self.history)
-
 
     def present_question(self, question: QuestionInstanceBinaryOp):
         print(get_now())
@@ -35,7 +34,7 @@ class SessionManager:
 
     def study(self, num_exercises=5):
         for _ in range(num_exercises):
-            question = self.curriculum.get_excercise()
+            question = self.curriculum.get_question()
             (response, time) = self.present_question(question)
             is_correct = (question.get_answer() == response)
             self.present_response(question, is_correct)
