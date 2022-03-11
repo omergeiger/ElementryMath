@@ -11,5 +11,27 @@ class HistoryLogger:
 
     def log(self, question, response_record: ResponseRecord):
         if question not in self.history:
-            self.history = []
-        self.history.append(response_record)
+            self.history[question] = []
+        self.history[question].append(response_record)
+
+    def get_question_responses(self, question):
+        if question not in self.history:
+            return 0
+        return len(self.history[question])
+
+    def get_question_correct_count(self, question):
+        if question not in self.history:
+            return 0
+        return len([rec for rec in self.history[question] if rec.correct is True])
+
+    def get_question_incorrect_count(self, question):
+        if question not in self.history:
+            return 0
+        return self.get_question_responses(question) - self.get_question_correct_count(question)
+
+    def get_questions_in_history(self):
+        return list(self.history.items())
+
+    def get_incorrect_questions(self):
+        incorrect_questions = [q for q in self.history if self.get_question_incorrect_count(q) > 0]
+        return incorrect_questions

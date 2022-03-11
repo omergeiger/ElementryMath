@@ -1,6 +1,3 @@
-import random
-
-
 class AbstractQuestionType:
     def __init__(self, **kargs):
         raise NotImplemented()

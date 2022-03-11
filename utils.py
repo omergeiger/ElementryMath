@@ -1,3 +1,5 @@
+from datetime import datetime
+import time
 import random
 
 
@@ -7,9 +9,6 @@ def choose_by_proportion(proportions):
         return None
 
     normalized_proportions = [p / sum_all for p in proportions]
-
-    # debug
-    # print(normalized_proportions)
 
     length = len(normalized_proportions)
     cdf = [sum(normalized_proportions[:i + 1]) for i in range(length)]
@@ -21,3 +20,11 @@ def choose_by_proportion(proportions):
             return i
 
     return length - 1
+
+
+def get_now():
+    return datetime.now().strftime("%H:%M:%S")
+
+
+def get_epoch():
+    return int(time.time())

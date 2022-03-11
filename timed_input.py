@@ -1,4 +1,3 @@
-from datetime import datetime
 import signal
 
 
@@ -40,7 +39,3 @@ def input_answer(timeout):
     except:
         print("invalid number")
         return None
-
-
-def get_now():
-    return datetime.now().strftime("%H:%M:%S")
