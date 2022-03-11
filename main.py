@@ -4,7 +4,7 @@ from questions import QuestionTypeBinaryOp
 
 if __name__ == "__main__":
     multiply_question_type = QuestionTypeBinaryOp(min_a=2, max_a=5, min_b=2, max_b=10, op="*", random_swap=True)
-    add_question_type = QuestionTypeBinaryOp(min_a=10, max_a=1000, min_b=10, max_b=1000, op="+", random_swap=True)
+    add_question_type = QuestionTypeBinaryOp(min_a=10, max_a=100, min_b=10, max_b=100, op="+", random_swap=True)
 
     curriculum = CompostiteCurriculum(
         [

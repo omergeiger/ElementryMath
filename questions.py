@@ -1,9 +1,12 @@
+import random
+
+
 class AbstractQuestionType:
     def __init__(self, **kargs):
         raise NotImplemented()
 
-    def get_all(self):
-        pass
+    def generate_question(self):
+        raise NotImplemented()
 
 
 class QuestionTypeBinaryOp(AbstractQuestionType):
@@ -16,19 +19,16 @@ class QuestionTypeBinaryOp(AbstractQuestionType):
         assert (op in ["*", "+", "-", "/"])
         self.op = op
         self.swap = random_swap
-        self.all_questions = self._generate_all()
 
-    def _generate_all(self):
-        all_questions = {QuestionInstanceBinaryOp(a, b, self.op) for a in range(self.min_a, self.max_a + 1) for b in
-                         range(self.min_b, self.max_b + 1)}
-        if self.swap is True:
-            swapped = {QuestionInstanceBinaryOp(a, b, self.op) for a in range(self.min_b, self.max_b + 1) for b in
-                       range(self.min_a, self.max_a + 1)}
-            all_questions = all_questions.union(swapped)
-        return all_questions
+    def generate_question(self):
+        a1 = int(self.min_a + random.random() * (self.max_a + 1 - self.min_a))
+        b1 = int(self.min_b + random.random() * (self.max_b + 1 - self.min_b))
 
-    def get_all(self):
-        return self.all_questions
+        if self.swap is True and random.random() < 0.5:
+            a1, b1 = b1, a1
+
+        question = QuestionInstanceBinaryOp(a1, b1, self.op)
+        return question
 
 
 class AbstractQuestionInstance:

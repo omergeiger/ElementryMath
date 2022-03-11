@@ -22,13 +22,11 @@ class AbstractCurriculum:
 
 class CurriculumRandom(AbstractCurriculum):
     def __init__(self, question_type: AbstractQuestionType):
-        self.all_questions = question_type.get_all()
+        self.question_type = question_type
 
     def get_question(self):
-        all_questions_list = list(self.all_questions)
-        selected_index = int(random.random() * len(all_questions_list))
-        selected_question = all_questions_list[selected_index]
-        return selected_question
+        question = self.question_type.generate_question()
+        return question
 
 
 class CurriculumByErrors(AbstractCurriculum):
