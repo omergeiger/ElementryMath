@@ -1,5 +1,3 @@
-import random
-
 from typing import List, Tuple
 
 from questions import AbstractQuestionType, QuestionTypeBinaryOp, QuestionInstanceBinaryOp
@@ -76,3 +74,33 @@ class CompostiteCurriculum(AbstractCurriculum):
 
         for curriculum in self.curriculums:
             curriculum.history = self.history
+
+
+multiply_question_type = QuestionTypeBinaryOp(min_a=2, max_a=5, min_b=2, max_b=10, op="*", random_swap=True)
+add_question_type = QuestionTypeBinaryOp(min_a=10, max_a=100, min_b=10, max_b=100, op="+", random_swap=True)
+subtract_question_type = QuestionTypeBinaryOp(min_a=10, max_a=100, min_b=10, max_b=100, op="-")
+division_question_type = QuestionTypeBinaryOp(min_a=2, max_a=100, min_b=2, max_b=10, op="/")
+
+curriculum_gilli = CompostiteCurriculum(
+    [
+        (CurriculumRandom(question_type=multiply_question_type), 0.2),
+        (CurriculumRandom(question_type=add_question_type), 0.2),
+        (CurriculumRandom(question_type=subtract_question_type), 0.2),
+        (CurriculumRandom(question_type=division_question_type), 0.2),
+        (CurriculumByErrors(fallback_question_type=multiply_question_type), 0.2)
+    ]
+)
+
+add_question_type_1 = QuestionTypeBinaryOp(min_a=1, max_a=10, min_b=1, max_b=10, op="+", random_swap=True)
+add_question_type_2 = QuestionTypeBinaryOp(min_a=1, max_a=10, min_b=10, max_b=20, op="+", random_swap=True)
+add_question_type_3 = QuestionTypeBinaryOp(min_a=1, max_a=10, min_b=10, max_b=90, op="+", random_swap=True)
+subtract_question_type = QuestionTypeBinaryOp(min_a=1, max_a=10, min_b=1, max_b=10, op="-")
+
+curriculum_nitzan = CompostiteCurriculum(
+    [
+        (CurriculumRandom(question_type=add_question_type_1), 0.4),
+        (CurriculumRandom(question_type=add_question_type_2), 0.25),
+        (CurriculumRandom(question_type=add_question_type_2), 0.15),
+        (CurriculumRandom(question_type=subtract_question_type), 0.2),
+    ]
+)
