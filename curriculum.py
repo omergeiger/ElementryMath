@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-from questions import AbstractQuestionType, QuestionTypeBinaryOp, QuestionInstanceBinaryOp
+from questions import AbstractQuestionType, BinaryOperationQuestionType, BinaryOperationQuestion, MultitermAdditionQuestionType
 from utils import choose_by_proportion
 
 from HistoryLogger import HistoryLogger, ResponseRecord
@@ -76,10 +76,10 @@ class CompostiteCurriculum(AbstractCurriculum):
             curriculum.history = self.history
 
 
-multiply_question_type = QuestionTypeBinaryOp(min_a=2, max_a=5, min_b=2, max_b=10, op="*", random_swap=True)
-add_question_type = QuestionTypeBinaryOp(min_a=10, max_a=100, min_b=10, max_b=100, op="+", random_swap=True)
-subtract_question_type = QuestionTypeBinaryOp(min_a=10, max_a=100, min_b=10, max_b=100, op="-")
-division_question_type = QuestionTypeBinaryOp(min_a=2, max_a=100, min_b=2, max_b=10, op="/")
+multiply_question_type = BinaryOperationQuestionType(min_a=2, max_a=5, min_b=2, max_b=10, op="*", random_swap=True)
+add_question_type = BinaryOperationQuestionType(min_a=10, max_a=100, min_b=10, max_b=100, op="+", random_swap=True)
+subtract_question_type = BinaryOperationQuestionType(min_a=10, max_a=100, min_b=10, max_b=100, op="-")
+division_question_type = BinaryOperationQuestionType(min_a=2, max_a=100, min_b=2, max_b=10, op="/")
 
 curriculum_gilli = CompostiteCurriculum(
     [
@@ -91,10 +91,10 @@ curriculum_gilli = CompostiteCurriculum(
     ]
 )
 
-add_question_type_1 = QuestionTypeBinaryOp(min_a=1, max_a=10, min_b=1, max_b=10, op="+", random_swap=True)
-add_question_type_2 = QuestionTypeBinaryOp(min_a=1, max_a=10, min_b=10, max_b=20, op="+", random_swap=True)
-add_question_type_3 = QuestionTypeBinaryOp(min_a=1, max_a=10, min_b=10, max_b=90, op="+", random_swap=True)
-subtract_question_type = QuestionTypeBinaryOp(min_a=1, max_a=10, min_b=1, max_b=10, op="-")
+add_question_type_1 = BinaryOperationQuestionType(min_a=1, max_a=10, min_b=1, max_b=10, op="+", random_swap=True)
+add_question_type_2 = BinaryOperationQuestionType(min_a=1, max_a=10, min_b=10, max_b=20, op="+", random_swap=True)
+add_question_type_3 = BinaryOperationQuestionType(min_a=1, max_a=10, min_b=10, max_b=90, op="+", random_swap=True)
+subtract_question_type = BinaryOperationQuestionType(min_a=1, max_a=10, min_b=1, max_b=10, op="-")
 
 curriculum_nitzan = CompostiteCurriculum(
     [
@@ -102,5 +102,14 @@ curriculum_nitzan = CompostiteCurriculum(
         (CurriculumRandom(question_type=add_question_type_2), 0.25),
         (CurriculumRandom(question_type=add_question_type_2), 0.15),
         (CurriculumRandom(question_type=subtract_question_type), 0.2),
+    ]
+)
+
+
+multi_addition_question_type = MultitermAdditionQuestionType()
+
+curriculum_nitzan_multiterm = CompostiteCurriculum(
+    [
+        (CurriculumRandom(question_type=multi_addition_question_type), 1.0),
     ]
 )

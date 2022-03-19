@@ -1,7 +1,7 @@
 from color_print import colorprint, ColorCodes
 from timed_input import input_answer
 from utils import get_now
-from questions import AbstractQuestionType, QuestionTypeBinaryOp, QuestionInstanceBinaryOp
+from questions import AbstractQuestionType, BinaryOperationQuestionType, BinaryOperationQuestion
 from curriculum import AbstractCurriculum
 from utils import get_epoch
 
@@ -15,7 +15,7 @@ class SessionManager:
         self.curriculum = curriculum
         self.curriculum.init_history(self.history)
 
-    def present_question(self, question: QuestionInstanceBinaryOp):
+    def present_question(self, question: BinaryOperationQuestion):
         print(get_now())
         print(question)
         start = get_epoch()
