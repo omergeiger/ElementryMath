@@ -24,19 +24,20 @@ class SessionManager:
         time_elapsed = end - start
         return response, time_elapsed
 
-    def present_response(self, question, correct):
+    def present_response(self, question, correct, time):
         if correct:
             colorprint("YES :-)", ColorCodes.CORRECT)
         else:
             colorprint("NO :-(", ColorCodes.INCORRECT)
             colorprint(f"{question}{question.get_answer()}", ColorCodes.INCORRECT)
-        print("\n")
+        print(f"response time: {time}")
+        print()
 
     def study(self, num_exercises=5):
         for _ in range(num_exercises):
             question = self.curriculum.get_question()
             (response, time) = self.present_question(question)
             is_correct = (question.get_answer() == response)
-            self.present_response(question, is_correct)
+            self.present_response(question, is_correct, time)
             response_record = ResponseRecord(is_correct, response, time)
             self.history.log(question, response_record)

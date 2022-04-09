@@ -91,6 +91,15 @@ curriculum_gilli = CompostiteCurriculum(
     ]
 )
 
+curriculum_gilli_nodiv = CompostiteCurriculum(
+    [
+        (CurriculumRandom(question_type=multiply_question_type), 0.25),
+        (CurriculumRandom(question_type=add_question_type), 0.25),
+        (CurriculumRandom(question_type=subtract_question_type), 0.25),
+        (CurriculumByErrors(fallback_question_type=multiply_question_type), 0.25)
+    ]
+)
+
 add_question_type_1 = BinaryOperationQuestionType(min_a=1, max_a=10, min_b=1, max_b=10, op="+", random_swap=True)
 add_question_type_2 = BinaryOperationQuestionType(min_a=1, max_a=10, min_b=10, max_b=20, op="+", random_swap=True)
 add_question_type_3 = BinaryOperationQuestionType(min_a=1, max_a=10, min_b=10, max_b=90, op="+", random_swap=True)
@@ -111,5 +120,14 @@ multi_addition_question_type = MultitermAdditionQuestionType()
 curriculum_nitzan_multiterm = CompostiteCurriculum(
     [
         (CurriculumRandom(question_type=multi_addition_question_type), 1.0),
+    ]
+)
+
+
+dual_addition_question_type = MultitermAdditionQuestionType(max_term_count=2)
+
+curriculum_nitzan_dualiterm = CompostiteCurriculum(
+    [
+        (CurriculumRandom(question_type=dual_addition_question_type), 1.0),
     ]
 )

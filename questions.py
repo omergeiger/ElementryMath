@@ -50,14 +50,14 @@ class BinaryOperationQuestionType(AbstractQuestionType):
 
 class MultitermAdditionQuestionType(AbstractQuestionType):
     def __init__(self, min_term_count=2, max_term_count=3, min_term_value=1, max_term_value=20,
-                 min_result=11, max_result=20, random_swap=True):
+                 min_result=11, max_result=20, swap=True):
         self.min_term_count = min_term_count
         self.max_term_count = max_term_count
         self.min_term_value = min_term_value
         self.max_term_value = max_term_value
         self.min_result = min_result
         self.max_result = max_result
-        self.swap = random_swap
+        self.shuffle = swap
 
         self._assert_feasibility()
 
@@ -81,6 +81,10 @@ class MultitermAdditionQuestionType(AbstractQuestionType):
             new_term = random.randint(min_val, max_val)
             terms.append(new_term)
             remaining_result -= new_term
+
+        if self.shuffle:
+            random.shuffle(terms)
+
         return terms
 
     def generate_question(self):
@@ -122,7 +126,7 @@ class MultitermOperationQuestion(AbstractQuestionInstance):
         self.answer = eval(self.as_expression())
 
     def as_expression(self):
-        return self.op.join(map(str, self.terms))
+        return f" {self.op} ".join(map(str, self.terms))
 
     def get_answer(self):
         return self.answer
