@@ -1,6 +1,7 @@
 from typing import List, Tuple
 
-from questions import AbstractQuestionType, BinaryOperationQuestionType, BinaryOperationQuestion, MultitermAdditionQuestionType
+from questions import AbstractQuestionType, BinaryOperationQuestionType, BinaryOperationQuestion, \
+    MultitermAdditionQuestionType
 from utils import choose_by_proportion
 
 from HistoryLogger import HistoryLogger, ResponseRecord
@@ -100,6 +101,20 @@ curriculum_gilli_nodiv = CompostiteCurriculum(
     ]
 )
 
+
+multiply_lh_question_type = BinaryOperationQuestionType(min_a=2, max_a=5, min_b=2, max_b=10, op="*", random_swap=True)
+multiply_hh_question_type = BinaryOperationQuestionType(min_a=6, max_a=10, min_b=6, max_b=10, op="*", random_swap=True)
+multiply_ll_question_type = BinaryOperationQuestionType(min_a=2, max_a=6, min_b=2, max_b=6, op="*", random_swap=True)
+
+curriculum_gilli_various_multiply = CompostiteCurriculum(
+    [
+        (CurriculumRandom(question_type=multiply_lh_question_type), 0.6),
+        (CurriculumRandom(question_type=multiply_hh_question_type), 0.3),
+        (CurriculumRandom(question_type=multiply_ll_question_type), 0.1),
+    ]
+)
+
+
 add_question_type_1 = BinaryOperationQuestionType(min_a=1, max_a=10, min_b=1, max_b=10, op="+", random_swap=True)
 add_question_type_2 = BinaryOperationQuestionType(min_a=1, max_a=10, min_b=10, max_b=20, op="+", random_swap=True)
 add_question_type_3 = BinaryOperationQuestionType(min_a=1, max_a=10, min_b=10, max_b=90, op="+", random_swap=True)
@@ -114,7 +129,6 @@ curriculum_nitzan = CompostiteCurriculum(
     ]
 )
 
-
 multi_addition_question_type = MultitermAdditionQuestionType()
 
 curriculum_nitzan_multiterm = CompostiteCurriculum(
@@ -123,11 +137,17 @@ curriculum_nitzan_multiterm = CompostiteCurriculum(
     ]
 )
 
-
 dual_addition_question_type = MultitermAdditionQuestionType(max_term_count=2)
 
 curriculum_nitzan_dualiterm = CompostiteCurriculum(
     [
         (CurriculumRandom(question_type=dual_addition_question_type), 1.0),
+    ]
+)
+
+curriculum_nitzan2 = CompostiteCurriculum(
+    [
+        (CurriculumRandom(question_type=dual_addition_question_type), 0.6),
+        (CurriculumRandom(question_type=subtract_question_type), 0.4),
     ]
 )
