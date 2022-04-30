@@ -1,4 +1,6 @@
 from datetime import datetime
+from enum import Enum
+
 import time
 import random
 
@@ -28,3 +30,18 @@ def get_now():
 
 def get_epoch():
     return int(time.time())
+
+
+class ColorCodes(Enum):
+    CORRECT = '\033[92m'
+    INCORRECT = '\033[91m'
+
+
+class ResponseStrings:
+    POSITIVE = "YES :-)"
+    NEGATIVE = "NO :-("
+
+
+def colorprint(text: str, color_code: ColorCodes):
+    ENDC = '\033[0m'
+    print(color_code.value + text + ENDC)

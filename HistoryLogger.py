@@ -30,8 +30,18 @@ class HistoryLogger:
         return self.get_question_responses(question) - self.get_question_correct_count(question)
 
     def get_questions_in_history(self):
-        return list(self.history.items())
+        return self.history.keys()
 
     def get_incorrect_questions(self):
         incorrect_questions = [q for q in self.history if self.get_question_incorrect_count(q) > 0]
         return incorrect_questions
+
+    def count_correct_responses(self):
+        questions = self.get_questions_in_history()
+        total_correct = sum([self.get_question_correct_count(q) for q in questions])
+        return total_correct
+
+    def count_incorrect_responses(self):
+        questions = self.get_questions_in_history()
+        total_incorrect = sum([self.get_question_incorrect_count(q) for q in questions])
+        return total_incorrect
