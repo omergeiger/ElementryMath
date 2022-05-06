@@ -1,7 +1,7 @@
 from typing import List, Tuple
 
 from questions import AbstractQuestionType, BinaryOperationQuestionType, BinaryOperationQuestion, \
-    MultitermAdditionQuestionType
+    MultitermAdditionQuestionType, BinaryVerticalOperationQuestionType
 from utils import choose_by_proportion
 
 from HistoryLogger import HistoryLogger, ResponseRecord
@@ -101,7 +101,6 @@ curriculum_gilli_nodiv = CompostiteCurriculum(
     ]
 )
 
-
 multiply_lh_question_type = BinaryOperationQuestionType(min_a=2, max_a=5, min_b=2, max_b=10, op="*", random_swap=True)
 multiply_hh_question_type = BinaryOperationQuestionType(min_a=6, max_a=10, min_b=6, max_b=10, op="*", random_swap=True)
 multiply_ll_question_type = BinaryOperationQuestionType(min_a=2, max_a=6, min_b=2, max_b=6, op="*", random_swap=True)
@@ -113,7 +112,6 @@ curriculum_gilli_various_multiply = CompostiteCurriculum(
         (CurriculumRandom(question_type=multiply_ll_question_type), 0.1),
     ]
 )
-
 
 add_question_type_1 = BinaryOperationQuestionType(min_a=1, max_a=10, min_b=1, max_b=10, op="+", random_swap=True)
 add_question_type_2 = BinaryOperationQuestionType(min_a=1, max_a=10, min_b=10, max_b=20, op="+", random_swap=True)
@@ -149,5 +147,14 @@ curriculum_nitzan2 = CompostiteCurriculum(
     [
         (CurriculumRandom(question_type=dual_addition_question_type), 0.6),
         (CurriculumRandom(question_type=subtract_question_type), 0.4),
+    ]
+)
+
+vertical_multiply_question_type = BinaryVerticalOperationQuestionType(
+    min_digits_a=2, max_digits_a=3, min_digits_b=1, max_digits_b=1, op="*")
+
+curriculum_gilli_vertical_mult = CompostiteCurriculum(
+    [
+        (CurriculumRandom(question_type=vertical_multiply_question_type), 1)
     ]
 )

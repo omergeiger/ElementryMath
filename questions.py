@@ -1,4 +1,6 @@
 import random
+from utils import digits2range
+from utils import num2digits
 
 
 class AbstractQuestionType:
@@ -93,6 +95,30 @@ class MultitermAdditionQuestionType(AbstractQuestionType):
         return question
 
 
+class BinaryVerticalOperationQuestionType(AbstractQuestionType):
+    def __init__(self, min_digits_a=2, max_digits_a=3, min_digits_b=1, max_digits_b=1, op="*"):
+        self.min_digits_a = min_digits_a
+        self.max_digits_a = max_digits_a
+        self.min_digits_b = min_digits_b
+        self.max_digits_b = max_digits_b
+        assert (op in ["*", "+"])
+        self.op = op
+
+        self.inner_question_type = BinaryOperationQuestionType(
+            min_a=digits2range(min_digits_a).low,
+            max_a=digits2range(max_digits_a).hi,
+            min_b=digits2range(min_digits_b).low,
+            max_b=digits2range(max_digits_b).hi,
+            op=self.op,
+            random_swap=False)
+
+    def generate_question(self):
+        a1, b1 = self.inner_question_type._generate_question_args()
+        a1, b1 = self.inner_question_type._fix_question_args_by_op(a1, b1)
+        question = BinaryVerticalOperationQuestion(a1, b1, self.op)
+        return question
+
+
 class AbstractQuestionInstance:
     def get_answer(self) -> int:
         raise NotImplemented()
@@ -105,16 +131,51 @@ class BinaryOperationQuestion(AbstractQuestionInstance):
 
         assert (op in ["*", "+", "-", "/"])
         self.op = op
-        self.answer = eval(self.as_expression())
+        self.answer = self.get_answer()
 
     def as_expression(self):
         return f"{self.a} {self.op} {self.b}"
 
     def get_answer(self):
+        if hasattr(self, 'answer') and self.answer is not None:
+            return self.answer
+        self.answer = eval(self.as_expression())
         return self.answer
 
     def __repr__(self):
         return f"{self.as_expression()} = "
+
+
+class BinaryVerticalOperationQuestion(BinaryOperationQuestion):
+    def __init__(self, *args):
+        super().__init__(*args)
+
+    def as_base_expression(self):
+        # base_expression is flattened
+        base_expression = super().as_expression()
+        return base_expression
+
+    def as_expression(self):
+        max_digits = max(num2digits(self.a), num2digits(self.b))
+
+        a_str = str(self.a).rjust(max_digits, " ")
+        b_str = str(self.b).rjust(max_digits, " ")
+        seperator = '-'
+
+        vertical_expression_str = \
+            f"{a_str}\n" \
+            f"{self.op}\n" \
+            f"{b_str}\n" \
+            f"{seperator * max_digits}\n"
+
+        return vertical_expression_str
+
+    def get_answer(self):
+        base_expression = self.as_base_expression()
+        if hasattr(self, 'answer') and self.answer is not None:
+            return self.answer
+        self.answer = eval(base_expression)
+        return self.answer
 
 
 class MultitermOperationQuestion(AbstractQuestionInstance):
