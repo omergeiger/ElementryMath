@@ -151,7 +151,7 @@ curriculum_nitzan2 = CompostiteCurriculum(
 )
 
 vertical_multiply_question_type = BinaryVerticalOperationQuestionType(
-    min_digits_a=2, max_digits_a=3, min_digits_b=1, max_digits_b=1, op="*")
+    min_digits_a=2, max_digits_a=2, min_digits_b=1, max_digits_b=1, op="*")
 
 curriculum_gilli_vertical_mult = CompostiteCurriculum(
     [
