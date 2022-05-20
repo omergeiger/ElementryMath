@@ -96,19 +96,23 @@ class MultitermAdditionQuestionType(AbstractQuestionType):
 
 
 class BinaryVerticalOperationQuestionType(AbstractQuestionType):
-    def __init__(self, min_digits_a=2, max_digits_a=3, min_digits_b=1, max_digits_b=1, op="*"):
-        self.min_digits_a = min_digits_a
-        self.max_digits_a = max_digits_a
-        self.min_digits_b = min_digits_b
-        self.max_digits_b = max_digits_b
+    def __init__(self, min_a=None, max_a=None, min_b=None, max_b=None,
+                 min_digits_a=2, max_digits_a=3, min_digits_b=1, max_digits_b=1,
+                 op="*"):
+
+        self.min_a = min_a if min_a is not None else digits2range(min_digits_a).low
+        self.max_a = max_a if max_a is not None else digits2range(max_digits_a).hi
+        self.min_b = min_b if min_b is not None else digits2range(min_digits_b).low
+        self.max_b = max_b if max_b is not None else digits2range(max_digits_b).hi
+
         assert (op in ["*", "+"])
         self.op = op
 
         self.inner_question_type = BinaryOperationQuestionType(
-            min_a=digits2range(min_digits_a).low,
-            max_a=digits2range(max_digits_a).hi,
-            min_b=digits2range(min_digits_b).low,
-            max_b=digits2range(max_digits_b).hi,
+            min_a=self.min_a,
+            max_a=self.max_a,
+            min_b=self.min_b,
+            max_b=self.max_b,
             op=self.op,
             random_swap=False)
 
