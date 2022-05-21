@@ -1,6 +1,6 @@
 class ResponseRecord:
-    def __init__(self, correct: bool, response: int, time):
-        self.correct = correct
+    def __init__(self, is_responded_and_correct: bool, response: int, time):
+        self.is_responded_and_correct = is_responded_and_correct
         self.response = response
         self.time = time
 
@@ -22,12 +22,17 @@ class HistoryLogger:
     def get_question_correct_count(self, question):
         if question not in self.history:
             return 0
-        return len([rec for rec in self.history[question] if rec.correct is True])
+        return len([rec for rec in self.history[question] if rec.is_responded_and_correct is True])
 
     def get_question_incorrect_count(self, question):
         if question not in self.history:
             return 0
-        return self.get_question_responses(question) - self.get_question_correct_count(question)
+        return len([rec for rec in self.history[question] if rec.is_responded_and_correct is False])
+
+    def get_question_timedout_count(self, question):
+        if question not in self.history:
+            return 0
+        return len([rec for rec in self.history[question] if rec.is_responded_and_correct is None])
 
     def get_questions_in_history(self):
         return self.history.keys()
@@ -45,3 +50,8 @@ class HistoryLogger:
         questions = self.get_questions_in_history()
         total_incorrect = sum([self.get_question_incorrect_count(q) for q in questions])
         return total_incorrect
+
+    def count_timedout_responses(self):
+        questions = self.get_questions_in_history()
+        total_timedout= sum([self.get_question_timedout_count(q) for q in questions])
+        return total_timedout

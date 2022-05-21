@@ -16,8 +16,6 @@ signal.signal(signal.SIGALRM, _interrupted)
 def _input_wrapper(timeout):
     signal.alarm(timeout)
     try:
-        # python 2
-        # input_str = raw_input()
         input_str = input()
         return input_str
     except:
@@ -30,7 +28,7 @@ def input_answer(timeout):
     try:
         in_string = _input_wrapper(timeout)
     except:
-        print("timeout")
+        print()
         return None
 
     try:

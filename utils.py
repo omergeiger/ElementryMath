@@ -36,11 +36,13 @@ def get_epoch():
 class ColorCodes(Enum):
     CORRECT = '\033[92m'
     INCORRECT = '\033[91m'
+    TIMEOUT = ''
 
 
 class ResponseStrings:
-    POSITIVE = "YES :-)"
-    NEGATIVE = "NO :-("
+    POSITIVE = " YES :-)"
+    NEGATIVE = "  NO :-("
+    TIMEOUT  = "TIME ???"
 
 
 def colorprint(text: str, color_code: ColorCodes):
@@ -67,6 +69,6 @@ def num2digits(num):
         return 1
     return ceil(log10(num) + 0.0001)
 
-# sanity test for num2digits()
-# for i in [0.0001,1,5,9,10,11,99,100,101]:
-#     print(f"{i} {num2digits(i)}")
+
+def sleep_between_questions():
+    time.sleep(2)
